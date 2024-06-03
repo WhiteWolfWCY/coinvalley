@@ -1,53 +1,68 @@
-"use client"
+"use client";
 
-import { useNewAccount } from "@/features/accounts/hooks/use-new-account"
+import { Loader2, Plus } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DataTable } from "@/components/DataTable"
+import { useNewAccount } from "@/features/accounts/hooks/use-new-account";
+import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
+import { useBulkDeleteAccounts } from "@/features/accounts/api/use-bulk-delete";
 
-import { Plus } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/DataTable";
 
-import { columns, Payment } from "./columns"
-
-const data: Payment[] = [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-        id: "728ed52f",
-        amount: 50,
-        status: "success",
-        email: "a@example.com",
-      },
-    // ...
-  ]
+import { columns } from "./columns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AccountsPage = () => {
+  const newAccount = useNewAccount();
+  const accountsQuery = useGetAccounts();
+  const deleteAccounts = useBulkDeleteAccounts()
+  const accounts = accountsQuery.data || [];
 
-    const newAccount = useNewAccount()
+  const isDisabled = accountsQuery.isLoading || deleteAccounts.isPending
+
+  if (accountsQuery.isLoading) {
+    return (
+      <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
+        <Card className="border-none drop-shadow-sm">
+          <CardHeader>
+            <Skeleton className="h-8 w-48" />
+            <CardContent>
+              <div className="h-[500px] w-full flex items-center justify-center">
+                <Loader2 className="size-6 text-slate-300 animate-spin" />
+              </div>
+            </CardContent>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
-        <Card className="border-none drop-shadow-sm">
-            <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
-                <CardTitle className="text-xl line-clamp-1">
-                    Accounts page
-                </CardTitle>
-                <Button onClick={newAccount.onOpen} size="sm">
-                    <Plus className="size-4 mr-2" />
-                    Add new
-                </Button>
-            </CardHeader>
-            <CardContent>
-                <DataTable onDelete={() => {}} filterKey="email" columns={columns} data={data} />
-            </CardContent>
-        </Card>
+      <Card className="border-none drop-shadow-sm">
+        <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
+          <CardTitle className="text-xl line-clamp-1">Accounts page</CardTitle>
+          <Button onClick={newAccount.onOpen} size="sm">
+            <Plus className="size-4 mr-2" />
+            Add new
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            onDelete={(row) => {
+              const ids = row.map((r) => r.original.id);
+              deleteAccounts.mutate({ ids })
+            }}
+            filterKey="email"
+            columns={columns}
+            data={accounts}
+            disabled={isDisabled}
+          />
+        </CardContent>
+      </Card>
     </div>
-  )
-}
+  );
+};
 
-export default AccountsPage
+export default AccountsPage;
