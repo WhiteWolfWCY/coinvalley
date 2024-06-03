@@ -22,6 +22,13 @@
       "when": 1717432409293,
       "tag": "0002_sad_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1717439182065,
+      "tag": "0003_outgoing_jigsaw",
+      "breakpoints": true
     }
   ]
 }
