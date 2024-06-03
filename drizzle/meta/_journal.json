@@ -15,6 +15,13 @@
       "when": 1716885541165,
       "tag": "0001_needy_roland_deschain",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1717432409293,
+      "tag": "0002_sad_crystal",
+      "breakpoints": true
     }
   ]
 }
