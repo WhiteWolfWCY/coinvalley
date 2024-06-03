@@ -20,7 +20,7 @@ const formSchema = insertAccountSchema.pick({
 
 type FormValues = z.input<typeof formSchema>;
 
-const NewAccountSheet = () => {
+export const NewAccountSheet = () => {
   const { isOpen, onClose } = useNewAccount();
 
   const mutation = useCreateAccount();
@@ -53,5 +53,3 @@ const NewAccountSheet = () => {
     </Sheet>
   );
 };
-
-export default NewAccountSheet;
