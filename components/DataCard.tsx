@@ -15,7 +15,7 @@ import {
 const boxVariant = cva("rounded-md p-3 shrink-0", {
   variants: {
     variant: {
-      default: "bg-slate-500/20",
+      default: "bg-green-500/20",
       success: "bg-emerald-500/20",
       danger: "bg-rose-500/20",
       warning: "bg-yellow-500/20",
@@ -29,7 +29,7 @@ const boxVariant = cva("rounded-md p-3 shrink-0", {
 const iconVariant = cva("size-6", {
   variants: {
     variant: {
-      default: "fill-slate-500",
+      default: "fill-green-500",
       success: "fill-emerald-500",
       danger: "fill-rose-500",
       warning: "fill-yellow-500",
@@ -90,7 +90,7 @@ export const DataCard = ({
             percentageChange < 0 && "text-rose-500"
           )}
         >
-          {formatPercentage(percentageChange)} from last period
+          {formatPercentage(percentageChange, {addPrefix: true})} from last period
         </p>
       </CardContent>
     </Card>
