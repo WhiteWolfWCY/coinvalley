@@ -7,6 +7,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/providers/query-provider";
 import { SheetProvider } from "@/providers/sheet-provider";
+import { constructMetadata } from "@/lib/utils";
 
 const inter = Nunito_Sans({
   weight: "400",
@@ -14,10 +15,7 @@ const inter = Nunito_Sans({
   subsets: ["latin"]
 });
 
-export const metadata: Metadata = {
-  title: "Coinvalley",
-  description: "The best place for tracking you spending habits!",
-};
+export const metadata = constructMetadata()
 
 export default function RootLayout({
   children,
