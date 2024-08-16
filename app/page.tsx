@@ -9,12 +9,12 @@ import Image from "next/image";
 
 export default function LandingPage() {
   return (
-      <div className="bg-gray-100">
+      <div className="bg-gray-100 pb-44">
         <LandingHeader />
         <HeroSection />
-        <Features />
-        <Testimonials />
-        <CallToAction />
+        <h1 className="mt-48 text-7xl font-semibold text-muted-foreground text-center">
+          Landing page in development...
+        </h1>
       </div>
   );
 }
