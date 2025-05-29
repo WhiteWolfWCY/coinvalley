@@ -5,7 +5,6 @@ import { client } from '@/lib/hono';
 import { convertAmountFromMiliunits } from '@/lib/utils';
 import React from 'react';
 
-// Mock next/navigation
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn().mockImplementation(() => ({
     get: (param: string) => {
@@ -35,7 +34,6 @@ jest.mock('@/lib/hono', () => ({
 
 const mockClientGet = client.api.summary.$get as jest.Mock;
 
-// Create a wrapper for the React Query context
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -64,7 +62,6 @@ describe('useGetSummary', () => {
   });
 
   it('should fetch summary data successfully', async () => {
-    // Mock response data
     const mockSummaryResponse = {
       incomeAmount: 5000000, // 5000 in miliunits
       expensesAmount: -2000000, // -2000 in miliunits
@@ -99,29 +96,23 @@ describe('useGetSummary', () => {
       ],
     };
 
-    // Mock successful response
     mockClientGet.mockResolvedValue({
       ok: true,
       json: jest.fn().mockResolvedValue({ data: mockSummaryResponse }),
     });
 
-    // Render the hook
     const { result } = renderHook(() => useGetSummary(), {
       wrapper: createWrapper(),
     });
 
-    // Initially should be loading
     expect(result.current.isLoading).toBe(true);
 
-    // Wait for the query to complete
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    // Verify data is correctly transformed
     expect(result.current.data).toEqual(expectedConvertedData);
     
-    // Verify API was called with correct parameters
     expect(mockClientGet).toHaveBeenCalledWith({
       query: {
         from: '2023-01-01',
@@ -130,30 +121,25 @@ describe('useGetSummary', () => {
       },
     });
     
-    // Verify amount conversion was called
     expect(convertAmountFromMiliunits).toHaveBeenCalledWith(mockSummaryResponse.incomeAmount);
     expect(convertAmountFromMiliunits).toHaveBeenCalledWith(mockSummaryResponse.expensesAmount);
     expect(convertAmountFromMiliunits).toHaveBeenCalledWith(mockSummaryResponse.remainingAmount);
   });
 
   it('should handle error when fetching summary fails', async () => {
-    // Mock error response
     mockClientGet.mockResolvedValue({
       ok: false,
       json: jest.fn().mockResolvedValue({ error: 'Failed to fetch' }),
     });
 
-    // Render the hook
     const { result } = renderHook(() => useGetSummary(), {
       wrapper: createWrapper(),
     });
 
-    // Wait for the query to complete with error
     await waitFor(() => {
       expect(result.current.isError).toBe(true);
     });
 
-    // Verify error state
     expect(result.current.error).toBeDefined();
   });
 }); 
